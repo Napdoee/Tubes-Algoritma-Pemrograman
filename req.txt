@@ -1,0 +1,3 @@
+customtkinter
+Pillow
+python-vlc # Uncomment if you plan to use VLC for video playback
