@@ -20,7 +20,10 @@ class MainPage(ctk.CTk):
         self._last_width = None
         self._resize_timer = None
         self._scroll_timer = None
-        self._last_size = (self.winfo_width(), self.winfo_height())  # Initialize _last_size
+        self._last_size = (
+            self.winfo_width(),
+            self.winfo_height(),
+        )  # Initialize _last_size
 
         self.original_bg = None
         self.bg_image = None
@@ -60,7 +63,10 @@ class MainPage(ctk.CTk):
         new_width = self.winfo_width()
         new_height = self.winfo_height()
 
-        if abs(new_width - self._last_size[0]) < 20 and abs(new_height - self._last_size[1]) < 20:
+        if (
+            abs(new_width - self._last_size[0]) < 20
+            and abs(new_height - self._last_size[1]) < 20
+        ):
             return
 
         self._last_size = (new_width, new_height)
@@ -86,14 +92,21 @@ class MainPage(ctk.CTk):
         self.search_frame.pack_propagate(False)
         self.search_frame.configure(height=50)
 
-        self.search_label = ctk.CTkLabel(self.search_frame, text="Search", font=("Helvetica", 16))
+        self.search_label = ctk.CTkLabel(
+            self.search_frame, text="Search", font=("Helvetica", 16)
+        )
         self.search_label.grid(row=0, column=0, padx=10, pady=5)
 
-        self.search_entry = ctk.CTkEntry(self.search_frame, font=("Helvetica", 16), width=250)
+        self.search_entry = ctk.CTkEntry(
+            self.search_frame, font=("Helvetica", 16), width=250
+        )
         self.search_entry.grid(row=0, column=1, padx=10, pady=5)
 
         self.search_button = ctk.CTkButton(
-            self.search_frame, text="Search", font=("Helvetica", 16), command=self.search
+            self.search_frame,
+            text="Search",
+            font=("Helvetica", 16),
+            command=self.search,
         )
         self.search_button.grid(row=0, column=2, padx=10, pady=5)
 
@@ -107,14 +120,19 @@ class MainPage(ctk.CTk):
         self.category_menu.grid(row=0, column=3, padx=10, pady=5)
 
         self.watchlist_button = ctk.CTkButton(
-            self.search_frame, text="Watchlist", font=("Helvetica", 16), command=self.open_watchlist
+            self.search_frame,
+            text="Watchlist",
+            font=("Helvetica", 16),
+            command=self.open_watchlist,
         )
         self.watchlist_button.grid(row=0, column=4, padx=10, pady=5)
 
         self.container_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.container_frame.pack(fill="both", expand=True, padx=20)
 
-        self.canvas = tk.Canvas(self.container_frame, bg="#1a1b1c", highlightthickness=0)
+        self.canvas = tk.Canvas(
+            self.container_frame, bg="#1a1b1c", highlightthickness=0
+        )
         self.canvas.pack(side="left", fill="both", expand=True, padx=(0, 10))
 
         self.scrollbar = ctk.CTkScrollbar(
@@ -123,10 +141,15 @@ class MainPage(ctk.CTk):
         self.scrollbar.pack(side="right", fill="y")
 
         self.scrollable_frame = ctk.CTkFrame(self.canvas, fg_color="#2a2d2e")
-        self.scrollable_frame.bind("<Configure>", lambda e: self.delayed_scroll_region())
+        self.scrollable_frame.bind(
+            "<Configure>", lambda e: self.delayed_scroll_region()
+        )
 
         self.canvas_window = self.canvas.create_window(
-            (0, 0), window=self.scrollable_frame, anchor="nw", width=self.canvas.winfo_width()
+            (0, 0),
+            window=self.scrollable_frame,
+            anchor="nw",
+            width=self.canvas.winfo_width(),
         )
 
         self.canvas.bind("<Configure>", self.on_canvas_configure)
@@ -165,7 +188,7 @@ class MainPage(ctk.CTk):
         return self.canvas.create_polygon(points, smooth=True, **kwargs)
 
     def delayed_scroll_region(self):
-        if hasattr(self, "_scroll_timer"):
+        if hasattr(self, "_scroll_timer") and self._scroll_timer is not None:
             self.after_cancel(self._scroll_timer)
         self._scroll_timer = self.after(
             100, lambda: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
@@ -183,7 +206,13 @@ class MainPage(ctk.CTk):
         height = self.canvas.winfo_height()
         radius = 15
         self.canvas.create_rounded_rectangle(
-            2, 2, width - 2, height - 2, radius=radius, fill="#1a1b1c", tags="rounded_rect"
+            2,
+            2,
+            width - 2,
+            height - 2,
+            radius=radius,
+            fill="#1a1b1c",
+            tags="rounded_rect",
         )
 
     def on_enter(self, event):
@@ -200,7 +229,9 @@ class MainPage(ctk.CTk):
 
         self.scrollable_frame.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
-        posters_to_display = poster_list if poster_list is not None else POSTER_FILENAMES
+        posters_to_display = (
+            poster_list if poster_list is not None else POSTER_FILENAMES
+        )
         BATCH_SIZE = 4
         for i in range(0, len(posters_to_display), BATCH_SIZE):
             batch = posters_to_display[i : i + BATCH_SIZE]
@@ -215,19 +246,24 @@ class MainPage(ctk.CTk):
                     self._image_cache[full_poster_path] = ImageTk.PhotoImage(image)
 
                 photo = self._image_cache[full_poster_path]
-                poster_frame = ctk.CTkFrame(self.scrollable_frame, fg_color="transparent")
+                poster_frame = ctk.CTkFrame(
+                    self.scrollable_frame, fg_color="transparent"
+                )
 
                 poster_label = ctk.CTkLabel(poster_frame, image=photo, text="")
                 poster_label.image = photo
                 poster_label.bind(
-                    "<Button-1>", lambda e, path=poster_filename: self.open_movie_detail(path)
+                    "<Button-1>",
+                    lambda e, path=poster_filename: self.open_movie_detail(path),
                 )
                 poster_label.bind("<Enter>", self.on_enter)
                 poster_label.bind("<Leave>", self.on_leave)
                 poster_label.pack()
 
                 title = os.path.splitext(poster_filename)[0]
-                title_label = ctk.CTkLabel(poster_frame, text=title, font=("Helvetica", 12))
+                title_label = ctk.CTkLabel(
+                    poster_frame, text=title, font=("Helvetica", 12)
+                )
                 title_label.pack(pady=2)
 
                 row, col = divmod(start_index + index, 4)
@@ -239,7 +275,8 @@ class MainPage(ctk.CTk):
             except Exception as e:
                 print(f"Error loading poster {poster_filename}: {e}")
                 placeholder = ctk.CTkLabel(
-                    self.scrollable_frame, text=f"Error: {os.path.splitext(poster_filename)[0]}"
+                    self.scrollable_frame,
+                    text=f"Error: {os.path.splitext(poster_filename)[0]}",
                 )
                 row, col = divmod(start_index + index, 4)
                 placeholder.grid(row=row, column=col, padx=15, pady=10)
@@ -259,7 +296,9 @@ class MainPage(ctk.CTk):
     def search(self):
         search_query = self.search_entry.get().lower()
         matching_posters = [
-            filename for filename in POSTER_FILENAMES if search_query in filename.lower()
+            filename
+            for filename in POSTER_FILENAMES
+            if search_query in filename.lower()
         ]
         if matching_posters:
             self.populate_posters(matching_posters)
