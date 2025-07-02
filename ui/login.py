@@ -8,6 +8,7 @@ from config.paths import BACKGROUND_IMAGE_PATH
 from ui.main_page import MainPage
 from utils.image_handler import load_image_for_background
 from utils.file_manager import save_credentials, load_credentials
+from services.user_service import UserService
 
 
 class App(ctk.CTk):
@@ -15,6 +16,9 @@ class App(ctk.CTk):
         super().__init__()
         self.geometry(DEFAULT_GEOMETRY)
         self.title("Login Page")
+
+        # Initialize user service
+        self.user_service = UserService()
 
         self.original_bg = None
         self.bg_image = None
@@ -47,22 +51,36 @@ class App(ctk.CTk):
             self.bg_label.configure(image=self.bg_image)
 
     def create_login_frame(self):
-        self.login_frame = ctk.CTkFrame(self, fg_color=("#ffffff", "#323232"), corner_radius=15)
+        self.login_frame = ctk.CTkFrame(
+            self, fg_color=("#ffffff", "#323232"), corner_radius=15
+        )
         self.login_frame.place(relx=0.5, rely=0.5, anchor="center")
 
         ctk.CTkLabel(
-            self.login_frame, text="Login", font=("Helvetica", 24, "bold"), text_color="white"
+            self.login_frame,
+            text="Login",
+            font=("Helvetica", 24, "bold"),
+            text_color="white",
         ).pack(padx=40, pady=25)
         ctk.CTkLabel(
-            self.login_frame, text="Username", font=("Helvetica", 16), text_color="white"
+            self.login_frame,
+            text="Username",
+            font=("Helvetica", 16),
+            text_color="white",
         ).pack(padx=40, pady=5)
         self.username_entry = ctk.CTkEntry(
-            self.login_frame, font=("Helvetica", 16), width=300, fg_color=("white", "gray20")
+            self.login_frame,
+            font=("Helvetica", 16),
+            width=300,
+            fg_color=("white", "gray20"),
         )
         self.username_entry.pack(padx=40, pady=5)
 
         ctk.CTkLabel(
-            self.login_frame, text="Password", font=("Helvetica", 16), text_color="white"
+            self.login_frame,
+            text="Password",
+            font=("Helvetica", 16),
+            text_color="white",
         ).pack(padx=40, pady=5)
         self.password_entry = ctk.CTkEntry(
             self.login_frame,
@@ -98,14 +116,17 @@ class App(ctk.CTk):
         password = self.password_entry.get()
 
         if LOGIN_CREDENTIALS.get(username) == password:
+            # Set current user in user service
+            self.user_service.set_current_user(username)
+
             if self.remember_me_var.get():
                 save_credentials(REMEMBER_ME_FILE, username, password)
             print("Login Success", "Welcome, " + username)
             self.destroy()
-            self.open_main_page()
+            self.open_main_page(username)
         else:
             print("Login Failed", "Invalid username or password")
 
-    def open_main_page(self):
-        main_page = MainPage()
+    def open_main_page(self, username):
+        main_page = MainPage(self.user_service)
         main_page.mainloop()

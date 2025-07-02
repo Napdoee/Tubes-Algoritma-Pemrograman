@@ -1,8 +1,5 @@
 import time
-
 from config.paths import POSTER_FILENAMES
-from config.settings import WATCHLIST_FILE
-from utils.file_manager import load_watchlist, save_watchlist
 
 
 class MovieService:
@@ -12,7 +9,7 @@ class MovieService:
 
     def bubble_sort(self, arr, reverse=False):
         n = len(arr)
-        sorted_arr = arr.copy()  # Hindari ubah data asli
+        sorted_arr = arr.copy()
         for i in range(n):
             for j in range(0, n - i - 1):
                 if (not reverse and sorted_arr[j] > sorted_arr[j + 1]) or (
@@ -64,35 +61,27 @@ class MovieService:
         return self.all_movies.copy()
 
 
+# Updated WatchlistService - now uses UserService
 class WatchlistService:
-    def __init__(self):
-        self.watchlist = load_watchlist(WATCHLIST_FILE)
+    def __init__(self, user_service):
+        self.user_service = user_service
 
     def add_to_watchlist(self, movie_filename):
-        """Add a movie to the watchlist"""
-        if movie_filename not in self.watchlist:
-            self.watchlist.append(movie_filename)
-            save_watchlist(WATCHLIST_FILE, self.watchlist)  # Simpan perubahan ke file
-            return True
-        return False
+        """Add a movie to the current user's watchlist"""
+        return self.user_service.add_to_user_watchlist(movie_filename)
 
     def remove_from_watchlist(self, movie_filename):
-        """Remove a movie from the watchlist"""
-        if movie_filename in self.watchlist:
-            self.watchlist.remove(movie_filename)
-            save_watchlist(WATCHLIST_FILE, self.watchlist)  # Simpan perubahan ke file
-            return True
-        return False
+        """Remove a movie from the current user's watchlist"""
+        return self.user_service.remove_from_user_watchlist(movie_filename)
 
     def is_in_watchlist(self, movie_filename):
-        """Check if a movie is in the watchlist"""
-        return movie_filename in self.watchlist
+        """Check if a movie is in the current user's watchlist"""
+        return self.user_service.is_in_user_watchlist(movie_filename)
 
     def get_watchlist(self):
-        """Get the current watchlist"""
-        return self.watchlist.copy()
+        """Get the current user's watchlist"""
+        return self.user_service.get_user_watchlist()
 
     def clear_watchlist(self):
-        """Clear the entire watchlist"""
-        self.watchlist.clear()
-        save_watchlist(WATCHLIST_FILE, self.watchlist)  # Simpan perubahan ke file
+        """Clear the current user's watchlist"""
+        return self.user_service.clear_user_watchlist()

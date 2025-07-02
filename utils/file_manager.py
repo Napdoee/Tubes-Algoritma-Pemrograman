@@ -1,6 +1,5 @@
-# FileName: /utils/file_manager.py
 import os
-import json  # Import the json module
+import json
 
 
 def save_credentials(filename, username, password):
@@ -30,7 +29,7 @@ def save_watchlist(filename, watchlist):
     """Saves the watchlist to a file."""
     try:
         with open(filename, "w") as f:
-            json.dump(watchlist, f)  # Use json.dump to save the list
+            json.dump(watchlist, f)
     except IOError as e:
         print(f"Error saving watchlist: {e}")
 
@@ -39,12 +38,37 @@ def load_watchlist(filename):
     """Loads the watchlist from a file."""
     try:
         with open(filename, "r") as f:
-            return json.load(f)  # Use json.load to load the list
+            return json.load(f)
     except FileNotFoundError:
-        return []  # Return an empty list if the file doesn't exist
+        return []
     except json.JSONDecodeError as e:
         print(f"Error decoding watchlist file: {e}")
-        return []  # Return empty list if file is corrupted
+        return []
     except IOError as e:
         print(f"Error loading watchlist: {e}")
         return []
+
+
+# New helper functions for JSON operations
+def save_json_file(filename, data):
+    """Save data to JSON file"""
+    try:
+        with open(filename, "w") as f:
+            json.dump(data, f, indent=2)
+    except IOError as e:
+        print(f"Error saving JSON file {filename}: {e}")
+
+
+def load_json_file(filename):
+    """Load data from JSON file"""
+    try:
+        with open(filename, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON file {filename}: {e}")
+        return None
+    except IOError as e:
+        print(f"Error loading JSON file {filename}: {e}")
+        return None
