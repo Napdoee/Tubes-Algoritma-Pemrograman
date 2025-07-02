@@ -1,4 +1,5 @@
-# FileName: /ui/watchlist.py
+# ui/watchlist.py
+
 import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageTk
@@ -7,13 +8,18 @@ import os
 from config.paths import get_poster_path
 from utils.image_handler import load_image_for_poster
 
+from services.movie_service import WatchlistService
+
 
 class WatchlistPage(tk.Toplevel):
-    def __init__(self, parent, watchlist):
+    # Ubah parameter watchlist menjadi watchlist_service
+    def __init__(self, parent, watchlist_service: WatchlistService):
         super().__init__(parent)
         self.geometry("1000x800")
         self.title("Watchlist")
-        self.watchlist = watchlist
+        self.watchlist_service = (
+            watchlist_service  # Simpan referensi ke WatchlistService
+        )
         self.parent = parent  # Reference to MainPage
 
         self.configure(bg="#2a2d2e")
@@ -37,7 +43,10 @@ class WatchlistPage(tk.Toplevel):
         for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
 
-        if not self.watchlist:
+        # Dapatkan watchlist terbaru dari service
+        current_watchlist = self.watchlist_service.get_watchlist()
+
+        if not current_watchlist:
             ctk.CTkLabel(
                 self.scrollable_frame,
                 text="Your watchlist is empty",
@@ -48,7 +57,9 @@ class WatchlistPage(tk.Toplevel):
         grid_frame = ctk.CTkFrame(self.scrollable_frame, fg_color="transparent")
         grid_frame.pack(fill="both", expand=True)
 
-        for i, movie_filename in enumerate(self.watchlist):
+        for i, movie_filename in enumerate(
+            current_watchlist
+        ):  # Gunakan current_watchlist
             try:
                 movie_frame = ctk.CTkFrame(grid_frame, fg_color="transparent")
                 row = i // 3
@@ -84,11 +95,9 @@ class WatchlistPage(tk.Toplevel):
                 ).pack(pady=10)
 
     def remove_movie(self, movie_filename):
-        if movie_filename in self.watchlist:
-            self.parent.remove_from_watchlist(
-                movie_filename
-            )  # Call parent's remove method
-            self.watchlist.remove(movie_filename)  # Update local watchlist
-            if movie_filename in self.images:
-                del self.images[movie_filename]
-            self.display_watchlist()  # Refresh display
+        # Panggil metode remove_from_watchlist dari MainPage, yang akan menggunakan WatchlistService
+        self.parent.remove_from_watchlist(movie_filename)
+        # Hapus dari cache gambar lokal jika ada
+        if movie_filename in self.images:
+            del self.images[movie_filename]
+        self.display_watchlist()  # Refresh tampilan setelah penghapusan
