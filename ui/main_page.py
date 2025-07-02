@@ -2,6 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
+import time
 
 from config.settings import DEFAULT_GEOMETRY, WATCHLIST_FILE
 from config.paths import BACKGROUND_IMAGE_PATH, POSTER_FILENAMES, get_poster_path
@@ -131,6 +132,14 @@ class MainPage(ctk.CTk):
         )
         self.watchlist_button.grid(row=0, column=4, padx=10, pady=5)
 
+        self.execution_time_label = ctk.CTkLabel(
+            self.search_frame,
+            text="Time: 0.000s",
+            font=("Helvetica", 12),
+            text_color="gray",
+        )
+        self.execution_time_label.grid(row=0, column=5, padx=10, pady=5)
+
         self.container_frame = ctk.CTkFrame(self, fg_color="transparent")
         self.container_frame.pack(fill="both", expand=True, padx=20)
 
@@ -226,6 +235,7 @@ class MainPage(ctk.CTk):
         event.widget.configure(cursor="")
 
     def populate_posters(self, poster_list=None):
+        start_time = time.time()
         for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
 
@@ -238,6 +248,11 @@ class MainPage(ctk.CTk):
         for i in range(0, len(posters_to_display), BATCH_SIZE):
             batch = posters_to_display[i : i + BATCH_SIZE]
             self.after(i * 50, lambda x=i, b=batch: self.load_poster_batch(x, b))
+
+        end_time = time.time()
+        self.execution_time_label.configure(
+            text=f"Time: {end_time - start_time:.3f}s (Setup)"
+        )
 
     def load_poster_batch(self, start_index, batch):
         for index, poster_filename in enumerate(batch):
@@ -307,6 +322,7 @@ class MainPage(ctk.CTk):
         watchlist_window = WatchlistPage(self, self.watchlist)
 
     def search(self):
+        start_time = time.time()  # Start timing for search
         search_query = self.search_entry.get().lower()
         matching_posters = [
             filename
@@ -322,6 +338,10 @@ class MainPage(ctk.CTk):
                 self.scrollable_frame, text="No Results Found", font=("Helvetica", 16)
             )
             no_results.grid(row=0, column=0, padx=15, pady=10)
+        end_time = time.time()  # End timing
+        self.execution_time_label.configure(
+            text=f"Time: {end_time - start_time:.3f}s (Search)"
+        )
 
     def category(self, value):
         if value == "Default":
