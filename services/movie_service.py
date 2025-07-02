@@ -12,13 +12,14 @@ class MovieService:
     def search_movies(self, query):
         with self.timer:  # Use timer context manager
             if not query:
-                return self.all_movies
-            query_lower = query.lower()
-            result = [
-                filename
-                for filename in self.all_movies
-                if query_lower in filename.lower()
-            ]
+                result = self.all_movies
+            else:
+                query_lower = query.lower()
+                result = [
+                    filename
+                    for filename in self.all_movies
+                    if query_lower in filename.lower()
+                ]
         return result
 
     def sort_movies(self, sort_type="Default"):

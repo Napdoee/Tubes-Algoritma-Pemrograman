@@ -1,4 +1,3 @@
-# ui/components/search_bar.py
 import customtkinter as ctk
 
 
