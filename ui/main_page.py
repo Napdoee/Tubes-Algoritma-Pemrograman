@@ -3,11 +3,15 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import os
 
-from config.settings import DEFAULT_GEOMETRY
+from config.settings import DEFAULT_GEOMETRY, WATCHLIST_FILE
 from config.paths import BACKGROUND_IMAGE_PATH, POSTER_FILENAMES, get_poster_path
 from ui.movie_detail import MovieDetailPage
 from ui.watchlist import WatchlistPage
 from utils.image_handler import load_image_for_background, load_image_for_poster
+from utils.file_manager import (
+    save_watchlist,
+    load_watchlist,
+)
 
 
 class MainPage(ctk.CTk):
@@ -23,14 +27,14 @@ class MainPage(ctk.CTk):
         self._last_size = (
             self.winfo_width(),
             self.winfo_height(),
-        )  # Initialize _last_size
+        )
 
         self.original_bg = None
         self.bg_image = None
         self.bg_label = None
 
         self.load_background()
-        self.watchlist = []
+        self.watchlist = load_watchlist(WATCHLIST_FILE)
         self.create_widgets()
         self.after(100, self.populate_posters)
 
@@ -217,11 +221,9 @@ class MainPage(ctk.CTk):
 
     def on_enter(self, event):
         event.widget.configure(cursor="hand2")
-        # event.widget.configure(width=260, height=360) # This might cause layout issues with grid
 
     def on_leave(self, event):
         event.widget.configure(cursor="")
-        # event.widget.configure(width=250, height=350) # This might cause layout issues with grid
 
     def populate_posters(self, poster_list=None):
         for widget in self.scrollable_frame.winfo_children():
@@ -288,7 +290,18 @@ class MainPage(ctk.CTk):
     def add_to_watchlist(self, poster_filename):
         if poster_filename not in self.watchlist:
             self.watchlist.append(poster_filename)
+            save_watchlist(
+                WATCHLIST_FILE, self.watchlist
+            )  # Save watchlist after adding
             print(f"Added to watchlist: {poster_filename}")
+
+    def remove_from_watchlist(self, poster_filename):  # New method
+        if poster_filename in self.watchlist:
+            self.watchlist.remove(poster_filename)
+            save_watchlist(
+                WATCHLIST_FILE, self.watchlist
+            )  # Save watchlist after removing
+            print(f"Removed from watchlist: {poster_filename}")
 
     def open_watchlist(self):
         watchlist_window = WatchlistPage(self, self.watchlist)

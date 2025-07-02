@@ -1,3 +1,4 @@
+# FileName: /ui/watchlist.py
 import customtkinter as ctk
 import tkinter as tk
 from PIL import Image, ImageTk
@@ -38,7 +39,9 @@ class WatchlistPage(tk.Toplevel):
 
         if not self.watchlist:
             ctk.CTkLabel(
-                self.scrollable_frame, text="Your watchlist is empty", font=("Helvetica", 16)
+                self.scrollable_frame,
+                text="Your watchlist is empty",
+                font=("Helvetica", 16),
             ).pack(pady=20)
             return
 
@@ -61,7 +64,9 @@ class WatchlistPage(tk.Toplevel):
                 img_label.pack(pady=5)
 
                 title = os.path.splitext(movie_filename)[0]
-                ctk.CTkLabel(movie_frame, text=title, font=("Helvetica", 12)).pack(pady=2)
+                ctk.CTkLabel(movie_frame, text=title, font=("Helvetica", 12)).pack(
+                    pady=2
+                )
 
                 ctk.CTkButton(
                     movie_frame,
@@ -80,10 +85,10 @@ class WatchlistPage(tk.Toplevel):
 
     def remove_movie(self, movie_filename):
         if movie_filename in self.watchlist:
-            self.watchlist.remove(movie_filename)
+            self.parent.remove_from_watchlist(
+                movie_filename
+            )  # Call parent's remove method
+            self.watchlist.remove(movie_filename)  # Update local watchlist
             if movie_filename in self.images:
                 del self.images[movie_filename]
-            self.display_watchlist()
-            # Optionally, update the main page's watchlist button if this movie was being viewed
-            # This would require passing a callback or direct access to main_page's method
-            # For simplicity, we'll just refresh the watchlist page.
+            self.display_watchlist()  # Refresh display
