@@ -63,7 +63,7 @@ class MainPage(ctk.CTk):
         movies = self.movie_service.get_all_movies()
         self.poster_grid.populate_posters(movies)
         # Set initial time to 0.0 as no search/sort operation has occurred yet
-        self.search_bar.update_time_label(0.0)
+        self.search_bar.update_time_label(False, 0.0)
 
     def _handle_search(self, query):
         """Handle search functionality"""
@@ -71,12 +71,12 @@ class MainPage(ctk.CTk):
             movies = self.movie_service.get_all_movies()
             self.poster_grid.populate_posters(movies)
             # When query is empty, reset time to 0.0
-            self.search_bar.update_time_label(0.0)
+            self.search_bar.update_time_label(False, 0.0)
             return
 
         # Perform search and get execution time
         matching_movies = self.movie_service.search_movies(query)
-        execution_time = self.movie_service.timer.last_execution_time
+        execution_time = self.movie_service.timer
 
         # Update UI
         if matching_movies:
@@ -85,19 +85,19 @@ class MainPage(ctk.CTk):
             self.poster_grid.show_no_results()
 
         # Update time label after search operation
-        self.search_bar.update_time_label(execution_time)
+        self.search_bar.update_time_label("Search", execution_time)
 
     def _handle_category_change(self, category):
         """Handle category/sorting change"""
         # Perform sort and get execution time
         sorted_movies = self.movie_service.sort_movies(category)
-        execution_time = self.movie_service.timer.last_execution_time
+        execution_time = self.movie_service.timer
 
         # Update UI
         self.poster_grid.populate_posters(sorted_movies)
 
         # Update time label after sort operation
-        self.search_bar.update_time_label(execution_time)
+        self.search_bar.update_time_label("Sort", execution_time)
 
     def _open_movie_detail(self, poster_filename):
         """Open movie detail page"""

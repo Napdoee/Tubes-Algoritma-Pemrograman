@@ -85,6 +85,8 @@ class SearchBarComponent:
     def clear_search(self):
         self.search_entry.delete(0, "end")
 
-    def update_time_label(self, time_in_seconds):
+    def update_time_label(self, name, time_in_seconds):
         """Updates the time label with the given execution time."""
-        self.execution_time_label.configure(text=f"Time: {time_in_seconds:.4f}s")
+        self.execution_time_label.configure(
+            text=f"Time {f"({name})" if name else ""}: {time_in_seconds:.6f}s"
+        )

@@ -1,36 +1,63 @@
+import time
+
 from config.paths import POSTER_FILENAMES
 from config.settings import WATCHLIST_FILE
 from utils.file_manager import load_watchlist, save_watchlist
-from utils.timer import ExecutionTimer  # Import ExecutionTimer
 
 
 class MovieService:
     def __init__(self):
         self.all_movies = POSTER_FILENAMES.copy()
-        self.timer = ExecutionTimer()  # Initialize timer
+        self.timer = 0
+
+    def bubble_sort(self, arr, reverse=False):
+        n = len(arr)
+        sorted_arr = arr.copy()  # Hindari ubah data asli
+        for i in range(n):
+            for j in range(0, n - i - 1):
+                if (not reverse and sorted_arr[j] > sorted_arr[j + 1]) or (
+                    reverse and sorted_arr[j] < sorted_arr[j + 1]
+                ):
+                    sorted_arr[j], sorted_arr[j + 1] = sorted_arr[j + 1], sorted_arr[j]
+        return sorted_arr
+
+    def linear_search(self, arr, target):
+        target = target.lower()
+        result = []
+        for item in arr:
+            if target in item.lower():
+                result.append(item)
+        return result
 
     def search_movies(self, query):
-        with self.timer:  # Use timer context manager
+        start_time = time.perf_counter()
+        try:
             if not query:
                 result = self.all_movies
             else:
-                query_lower = query.lower()
-                result = [
-                    filename
-                    for filename in self.all_movies
-                    if query_lower in filename.lower()
-                ]
-        return result
+                result = self.linear_search(self.all_movies, query)
+            return result
+        finally:
+            end_time = time.perf_counter()
+            self.timer = end_time - start_time
+            print(
+                f"Execution time (Searching - Linear Search): {self.timer:.6f} seconds"
+            )
 
     def sort_movies(self, sort_type="Default"):
-        with self.timer:  # Use timer context manager
+        start_time = time.perf_counter()
+        try:
             if sort_type == "Ascending":
-                result = sorted(self.all_movies)
+                result = self.bubble_sort(self.all_movies, reverse=False)
             elif sort_type == "Descending":
-                result = sorted(self.all_movies, reverse=True)
-            else:  # Default
+                result = self.bubble_sort(self.all_movies, reverse=True)
+            else:
                 result = self.all_movies.copy()
-        return result
+            return result
+        finally:
+            end_time = time.perf_counter()
+            self.timer = end_time - start_time
+            print(f"Execution time (Sorting - Bubble Sort): {self.timer:.6f} seconds")
 
     def get_all_movies(self):
         """Get all available movies"""
