@@ -7,9 +7,9 @@ class UserService:
     def __init__(self):
         self.users_file = "users_data.json"
         self.current_user = None
-        self.users_data = self._load_users_data()
+        self.users_data = self.__load_users_data()
 
-    def _load_users_data(self):
+    def __load_users_data(self):
         """Load users data from file"""
         try:
             return load_json_file(self.users_file) or {}
