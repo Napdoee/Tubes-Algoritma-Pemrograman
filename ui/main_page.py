@@ -45,6 +45,7 @@ class MainPage(ctk.CTk):
             on_search_callback=self._handle_search,
             on_category_callback=self._handle_category_change,
             on_watchlist_callback=self._open_watchlist,
+            on_logout_callback=self._logout_callback,
         )
 
         self.poster_grid = PosterGridComponent(
@@ -56,6 +57,13 @@ class MainPage(ctk.CTk):
         movies = self.movie_service.get_all_movies()
         self.poster_grid.populate_posters(movies)
         self.search_bar.update_time_label(False, 0.0)
+
+    def _logout_callback(self):
+        self.destroy()
+        from ui.login import App
+
+        login_app = App()
+        login_app.mainloop()
 
     def _handle_search(self, query):
         """Handle search functionality"""

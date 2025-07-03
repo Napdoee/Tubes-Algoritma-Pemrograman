@@ -3,17 +3,18 @@ import customtkinter as ctk
 
 class SearchBarComponent:
     def __init__(
-        self, parent, on_search_callback, on_category_callback, on_watchlist_callback
+        self, parent, on_search_callback, on_category_callback, on_watchlist_callback, on_logout_callback
     ):
         self.parent = parent
         self.on_search_callback = on_search_callback
         self.on_category_callback = on_category_callback
         self.on_watchlist_callback = on_watchlist_callback
+        self.on_logout_callback = on_logout_callback
 
         self.search_frame = None
         self.search_entry = None
         self.category_menu = None
-        self.execution_time_label = None  # Add this attribute
+        self.execution_time_label = None
 
         self._create_widgets()
 
@@ -60,7 +61,6 @@ class SearchBarComponent:
         )
         watchlist_button.grid(row=0, column=4, padx=10, pady=5)
 
-        # New: Label to display execution time
         self.execution_time_label = ctk.CTkLabel(
             self.search_frame,
             text="Time: 0.000s",
@@ -68,16 +68,30 @@ class SearchBarComponent:
             text_color="gray",
         )
         self.execution_time_label.grid(row=0, column=5, padx=10, pady=5)
-
+        
+        logout_button = ctk.CTkButton(
+            self.search_frame,
+            text="Logout",
+            font=("Helvetica", 16),
+            command=self._on_logout,
+            fg_color="#dc3545",  
+            hover_color="#c82333",
+            width=80,
+        )
+        logout_button.place(relx=1.0, rely=0.5, anchor="e", x=-10) 
+        
     def _on_search(self):
         query = self.search_entry.get()
-        self.on_search_callback(query)  # This callback will update the time label
+        self.on_search_callback(query)
 
     def _on_category(self, value):
-        self.on_category_callback(value)  # This callback will update the time label
+        self.on_category_callback(value)
 
     def _on_watchlist(self):
         self.on_watchlist_callback()
+
+    def _on_logout(self):
+        self.on_logout_callback()
 
     def get_search_query(self):
         return self.search_entry.get()
