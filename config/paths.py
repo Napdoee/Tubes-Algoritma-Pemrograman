@@ -35,15 +35,24 @@ POSTER_FILENAMES = [
     "clouds.jpg",
 ]
 
-# Video paths (relative to VIDEOS_DIR)
-VIDEO_FILENAMES = {
-    "Home Alone": "Home Alone Official Trailer.mp4",
-    "insidious": "Insidious (2010) Official Trailer #1 - James Wan Movie HD.mp4",
-    "Back to the future": "WhatsApp Video 2021-04-14 at 9.46.39 PM.mp4",  # Assuming this is the correct file name
-    "My Neighbour Totoro": "My Neighbor Totoro - Celebrate Studio Ghibli - Official Trailer.mp4",
-    "The Greatest Showman": "The Greatest Showman _ Official HD Trailer #1 _ 2017.mp4",
-    "Coda": "videoplayback.mp4",  # Assuming this is the correct file name
-    "spiderman": "SPIDER-MAN_ NO WAY HOME - Official Trailer (HD).mp4",
+# YouTube trailer links
+YOUTUBE_TRAILER_LINKS = {
+    "Home Alone": "https://www.youtube.com/watch?v=jdRCNM2k42o",
+    "Back to the future": "https://www.youtube.com/watch?v=qvsgGtivCgs",
+    "insidious": "https://www.youtube.com/watch?v=zuZnRUcoWos",
+    "Coda": "https://www.youtube.com/watch?v=o-Uv9W5qtag",
+    "The Greatest Showman": "https://www.youtube.com/watch?v=AXCTMGYUg9A",
+    "Tetris": "https://www.youtube.com/watch?v=LeAltgu_pbM",
+    "500 Days of Summer": "https://www.youtube.com/watch?v=PsD0NpFSADM",
+    "My Neighbour Totoro": "https://www.youtube.com/watch?v=92a7Hj0ijLs",
+    "Koe no Katachi": "https://www.youtube.com/watch?v=nfK6UgLra7g",
+    "Forrest Gump": "https://www.youtube.com/watch?v=bLvqoHBptjg",
+    "Weathering with You": "https://www.youtube.com/watch?v=Q6iK6DjV_f8",
+    "spiderman": "https://www.youtube.com/watch?v=JfVOs4VSpmA",
+    "josee": "https://www.youtube.com/watch?v=mOZ2-WbYXbQ",
+    "suzume": "https://www.youtube.com/watch?v=5q0qfZLhYd4",
+    "maquia": "https://www.youtube.com/watch?v=AEWvRqZQ0RU",
+    "clouds": "https://www.youtube.com/watch?v=oKdIrUyoy5c",
 }
 
 
@@ -51,8 +60,6 @@ def get_poster_path(filename):
     return os.path.join(POSTER_IMAGES_DIR, filename)
 
 
-def get_video_path(movie_title):
-    filename = VIDEO_FILENAMES.get(movie_title)
-    if filename:
-        return os.path.join(VIDEOS_DIR, filename)
-    return None
+def get_youtube_trailer_link(movie_title):
+    """Get YouTube trailer link for a movie"""
+    return YOUTUBE_TRAILER_LINKS.get(movie_title)
