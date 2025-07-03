@@ -14,8 +14,11 @@ from services.user_service import UserService
 class MainPage(ctk.CTk):
     def __init__(self, user_service: UserService):
         super().__init__()
-        self.geometry(DEFAULT_GEOMETRY)
+        # self.geometry(DEFAULT_GEOMETRY)
         self.title(f"Main Page - Welcome {user_service.get_current_user()}")
+
+        self.state("zoomed")  # For Windows
+        self.attributes("-fullscreen", True)
 
         # Initialize services
         self.user_service = user_service
