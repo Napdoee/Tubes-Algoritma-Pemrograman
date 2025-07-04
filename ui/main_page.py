@@ -14,11 +14,14 @@ from services.user_service import UserService
 class MainPage(ctk.CTk):
     def __init__(self, user_service: UserService):
         super().__init__()
-        # self.geometry(DEFAULT_GEOMETRY)
         self.title(f"Main Page - Welcome {user_service.get_current_user()}")
 
-        self.state("zoomed")  # For Windows
+        # self.state("zoomed")  # For Windows
+        # self.geometry("1920x1080")
         self.attributes("-fullscreen", True)
+        # screen_width = self.winfo_screenwidth()
+        # screen_height = self.winfo_screenheight()
+        # self.geometry(f"{screen_width}x{screen_height}+0+0")
 
         # Initialize services
         self.user_service = user_service

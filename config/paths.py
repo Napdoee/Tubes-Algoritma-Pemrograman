@@ -37,22 +37,22 @@ POSTER_FILENAMES = [
 
 # YouTube trailer links
 YOUTUBE_TRAILER_LINKS = {
-    "Home Alone": "https://www.youtube.com/watch?v=jdRCNM2k42o",
-    "Back to the future": "https://www.youtube.com/watch?v=qvsgGtivCgs",
-    "insidious": "https://www.youtube.com/watch?v=zuZnRUcoWos",
-    "Coda": "https://www.youtube.com/watch?v=o-Uv9W5qtag",
-    "The Greatest Showman": "https://www.youtube.com/watch?v=AXCTMGYUg9A",
-    "Tetris": "https://www.youtube.com/watch?v=LeAltgu_pbM",
-    "500 Days of Summer": "https://www.youtube.com/watch?v=PsD0NpFSADM",
-    "My Neighbour Totoro": "https://www.youtube.com/watch?v=92a7Hj0ijLs",
+    "Home Alone": "https://youtu.be/dzdpqRGA1qc?si=zQLzCTO7FbOpWOfl",
+    "Back to the future": "https://youtu.be/qvsgGtivCgs?si=PsLuk7yDl3GK1q8v",
+    "insidious": "https://youtu.be/zuZnRUcoWos?si=d6ypj49F3Caxf8-N",
+    "Coda": "https://youtu.be/0pmfrE1YL4I?si=9B6Rl326XP-UwxtR",
+    "The Greatest Showman": "https://youtu.be/EodWwczRIe4?si=UANpP3CjF-ybLDtJ",
+    "Tetris": "https://youtu.be/-BLM1naCfME?si=G0gjy963Yx-tnUx_",
+    "500 Days of Summer": "https://youtu.be/PsD0NpFSADM?si=l6GbLgC6WrDKNsAr",
+    "My Neighbour Totoro": "https://youtu.be/92a7Hj0ijLs?si=LBnutUzxrk6W3s-e",
     "Koe no Katachi": "https://www.youtube.com/watch?v=nfK6UgLra7g",
-    "Forrest Gump": "https://www.youtube.com/watch?v=bLvqoHBptjg",
-    "Weathering with You": "https://www.youtube.com/watch?v=Q6iK6DjV_f8",
+    "Forrest Gump": "https://youtu.be/bLvqoHBptjg?si=rleX5TKzaZcS82kK",
+    "Weathering with You": "https://youtu.be/YAXTn0E-Zgo?si=ZVy18046Uw5evOzw",
     "spiderman": "https://www.youtube.com/watch?v=JfVOs4VSpmA",
-    "josee": "https://www.youtube.com/watch?v=mOZ2-WbYXbQ",
+    "josee": "https://youtu.be/pyDCubgU57g?si=mORborvQRVS7fAD1",
     "suzume": "https://www.youtube.com/watch?v=5q0qfZLhYd4",
     "maquia": "https://www.youtube.com/watch?v=AEWvRqZQ0RU",
-    "clouds": "https://www.youtube.com/watch?v=oKdIrUyoy5c",
+    "clouds": "https://youtu.be/OWEgUhWU4g4?si=taPQDm_8yWxhGChe",
 }
 
 
